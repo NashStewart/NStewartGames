@@ -21,7 +21,7 @@ class Board < Gosu::Window
 			@tiles << line.gsub("\n", '').split(',')
 		end
 
-		@player = Player.new(self, 0, 1, 50, 50, 'assets/erza.png')
+		@player = Player.new(self, 0, 0, 50, 50, 'assets/erza.png')
 		@orb = Orb.new(self, -1, -1)
 	end
 
@@ -75,14 +75,14 @@ class Board < Gosu::Window
 		color = Gosu::Color.rgba(100,100,100,255)
 
 		for i in 0..@tiles.length-1 do
-			temp = ''
 			for j in 0..@tiles[0].length-1 do
 				
-				if @tiles[i][j] == '0'
+				case @tiles[i][j]
+				when '0'
 					#TODO draw floor
-				elsif @tiles[i][j] == '1'
+				when '1'
 					draw_rect(x_coordinate(j), y_coordinate(i), @width/(@columns), @height/(@rows), color)
-				elsif @tiles[i][j] == '2'
+				when '2'
 					@orb.move(i, j)
 				end
 			end
