@@ -1,5 +1,7 @@
 require 'gosu'
 require_relative 'player'
+require_relative 'orb'
+
 
 class Board < Gosu::Window
 
@@ -19,15 +21,13 @@ class Board < Gosu::Window
 			@tiles << line.gsub("\n", '').split(',')
 		end
 
-		@ball_x = -1
-		@ball_y = -1
-
-		@player = Player.new(self)
+		@player = Player.new(self, 0, 1, 50, 50, 'assets/erza.png')
+		@orb = Orb.new(self, -1, -1)
 	end
 
 	# LOOP
 	def update
-		if @player.x == @ball_x && @player.y == @ball_y
+		if @player.x == @orb.x && @player.y == @orb.y
 			puts "Player wins!"
 			close
 		end
@@ -43,9 +43,10 @@ class Board < Gosu::Window
 	end
 
 	def draw
-		draw_grid
+		#draw_grid
 		draw_tiles
 		@player.draw
+		@orb.draw
 	end
 
 	# GRID
@@ -71,7 +72,7 @@ class Board < Gosu::Window
 
 	# TILES
 	def draw_tiles
-		color = Gosu::Color.rgba(100,100,100,100)
+		color = Gosu::Color.rgba(100,100,100,255)
 
 		for i in 0..@tiles.length-1 do
 			temp = ''
@@ -82,16 +83,7 @@ class Board < Gosu::Window
 				elsif @tiles[i][j] == '1'
 					draw_rect(x_coordinate(j), y_coordinate(i), @width/(@columns), @height/(@rows), color)
 				elsif @tiles[i][j] == '2'
-					@ball_x = x_coordinate(j)
-					@ball_y = y_coordinate(i)
-
-					width = 50.0
-					height = 50.0
-
-					scale_x = @width / (@columns) / (width)
-					scale_y = @height / (@rows) / (height)
-					ball_image = Gosu::Image.new('ball.png', rect: [0, 0, width, height])
-					ball_image.draw(@ball_x, @ball_y, 0, scale_x, scale_y)
+					@orb.move(i, j)
 				end
 			end
 		end

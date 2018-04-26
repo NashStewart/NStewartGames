@@ -1,25 +1,9 @@
-require 'Gosu'
+require_relative 'entity'
 
-class Player
+class Player < Entity
 
-	attr_accessor :x, :y
-
-	def initialize(window)
-		@window = window
-
-		@width = 50.0
-		@height = 50.0
-
-		@scale_x = @window.width / (@window.columns) / (@width)
-		@scale_y = @window.height / (@window.rows) / (@height)
-
-		@column = 0
-		@row = 0
-		@x = 0
-		@y = 0
-
-		@speed = 1
-		@image = Gosu::Image.new('erza.png', rect: [0, 0, @width, @height])
+	def initialize(window, row, column, height, width, image_file_name='')
+		super(window, row, column, height, width, image_file_name)
 	end
 
 	def move_up
@@ -48,9 +32,5 @@ class Player
 			@column += 1
 		end
 		@x = @window.x_coordinate(@column)
-	end
-
-	def draw
-		@image.draw(@x, @y, 0, @scale_x, @scale_y)
 	end
 end
