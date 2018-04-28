@@ -1,7 +1,7 @@
 require 'gosu'
 require_relative 'player'
 require_relative 'orb'
-
+require_relative 'cup_cake'
 
 class Board < Gosu::Window
 
@@ -22,12 +22,14 @@ class Board < Gosu::Window
 		end
 
 		@player = Player.new(self, 0, 0, 50, 50, 'assets/erza.png')
-		@orb = Orb.new(self, -1, -1)
+		# @orb = Orb.new(self, -1, -1)
+		@cup_cake = CupCake.new(self, -1, -1)
+		@floor = Entity.new(self, -1, -1, 50 , 50, 'assets/floor_tile.png')
 	end
 
 	# LOOP
 	def update
-		if @player.x == @orb.x && @player.y == @orb.y
+		if @player.x == @cup_cake.x && @player.y == @cup_cake.y
 			puts "Player wins!"
 			close
 		end
@@ -46,7 +48,7 @@ class Board < Gosu::Window
 		#draw_grid
 		draw_tiles
 		@player.draw
-		@orb.draw
+		@cup_cake.draw
 	end
 
 	# GRID
@@ -72,18 +74,22 @@ class Board < Gosu::Window
 
 	# TILES
 	def draw_tiles
-		color = Gosu::Color.rgba(100,100,100,255)
+		color = Gosu::Color.rgba(25,25,25,255)
 
 		for i in 0..@tiles.length-1 do
 			for j in 0..@tiles[0].length-1 do
-				
+
 				case @tiles[i][j]
 				when '0'
-					#TODO draw floor
+					floor = Entity.new(self, i, j, 50 , 50, 'assets/floor_tile.png')
+					floor.draw
 				when '1'
 					draw_rect(x_coordinate(j), y_coordinate(i), @width/(@columns), @height/(@rows), color)
 				when '2'
-					@orb.move(i, j)
+					floor = Entity.new(self, i, j, 50 , 50, 'assets/floor_tile.png')
+					floor.draw
+					@cup_cake.move(i, j)
+				when '3'
 				end
 			end
 		end
