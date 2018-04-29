@@ -2,7 +2,7 @@ require 'Gosu'
 
 class Entity
 
-	attr_accessor :x, :y, :width, :height, :image_file_name, :walkable
+	attr_accessor :x, :y, :width, :height, :image_file_name, :walkable, :row, :column
 
 	def initialize(window, row, column, height, width, image_file_name='')
 		@window = window

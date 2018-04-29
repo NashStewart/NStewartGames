@@ -4,6 +4,17 @@ class Player < Entity
 
 	def initialize(window, row, column, height, width, image_file_name='')
 		super(window, row, column, height, width, image_file_name)
+
+		@sight_range = 1
+	end
+
+	def within_sight(row, column)
+		if (@row == row || @row-@sight_range == row || @row+@sight_range == row) &&
+			(@column == column || @column-@sight_range == column || @column+@sight_range == column)
+			true
+		else
+			false
+		end
 	end
 
 	def move_up

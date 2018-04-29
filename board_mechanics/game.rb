@@ -5,7 +5,7 @@ require_relative 'player'
 class Game
 
 	def initialize
-		board = Board.new
+		board = Board.new('boards/board02')
 		board.show
 	end
 end

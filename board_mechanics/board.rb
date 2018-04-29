@@ -8,7 +8,7 @@ class Board < Gosu::Window
 
 	attr_reader :width, :height, :columns, :rows, :tiles
 
-	def initialize
+	def initialize(board_name)
 		@width = 800
 		@height = 600
 
@@ -18,7 +18,7 @@ class Board < Gosu::Window
 		super(@width, @height, false)
 
 		@board = []
-		File.open('board01.txt').each do |line|
+		File.open(board_name + '.txt').each do |line|
 			@board << line.gsub("\n", '').split(',')
 		end
 
@@ -82,15 +82,7 @@ class Board < Gosu::Window
 		#draw_grid
 		draw_environment
 
-		@cup_cake.draw
-
-		@key_one.draw
-		@key_two.draw
-		@key_three.draw
-
-		@door_one.draw
-		@door_two.draw
-		@door_three.draw
+		draw_objects
 
 		@player.draw
 	end
@@ -124,38 +116,40 @@ class Board < Gosu::Window
 			for j in 0..@board[0].length-1 do
 
 				case @board[i][j]
-				when '0'
+				when ' '
 					@tiles[i][j] = Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png')
 				when '1'
 					@tiles[i][j] = Entity.new(self, i, j, 50 , 50, 'assets/rock_texture.png')
 					@tiles[i][j].walkable = false
-				when '2'
+				when 'V'
 					@tiles[i][j] = Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png')
 					@cup_cake = CupCake.new(self, i, j)
-				when '3'
+				when 'p'
 					@tiles[i][j] = Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png')
 					@player = Player.new(self, i, j, 50, 50, 'assets/erza.png')
-				when '4'
+				when 'a'
 					@tiles[i][j] = Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png')
 					@key_one = Key.new(self, i, j, 0)
 					@key_one.exists = true
-				when '5'
+				when 'b'
 					@tiles[i][j] = Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png')
 					@key_two = Key.new(self, i, j, 2)
-				when '6'
+				when 'c'
 					@tiles[i][j] = Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png')
 					@key_three = Key.new(self, i, j, 1)
-				when '7'
+				when 'A'
 					@door_one = Door.new(self, i, j, 0)
 					@tiles[i][j] = @door_one
-				when '8'
+				when 'B'
 					@door_two = Door.new(self, i, j, 2)
 					@tiles[i][j] = @door_two
-				when '9'
+				when 'C'
 					@door_three = Door.new(self, i, j, 1)
 					@tiles[i][j] = @door_three
 				else
 					#Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png').draw
+					puts i
+					puts j
 					draw_rect(x_coordinate(j), y_coordinate(i), @width/(@columns), @height/(@rows), color)
 				end
 			end
@@ -164,9 +158,30 @@ class Board < Gosu::Window
 
 	def draw_environment
 		@tiles.each do |row|
-			row.each do |column|
-				column.draw
+			row.each do |tile|
+				if @player.within_sight(tile.row, tile.column)
+					tile.draw
+				end
 			end
 		end
 	end	
+
+	def draw_objects
+		objects = []
+		objects << @cup_cake
+
+		objects << @key_one
+		objects << @key_two
+		objects << @key_three
+
+		objects << @door_one
+		objects << @door_two
+		objects << @door_three
+
+		objects.each do |object|
+			if @player.within_sight(object.row, object.column)
+				object.draw
+			end
+		end
+	end
 end
