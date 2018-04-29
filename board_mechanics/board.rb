@@ -24,7 +24,6 @@ class Board < Gosu::Window
 		@player = Player.new(self, 0, 0, 50, 50, 'assets/erza.png')
 		# @orb = Orb.new(self, -1, -1)
 		@cup_cake = CupCake.new(self, -1, -1)
-		@floor = Entity.new(self, -1, -1, 50 , 50, 'assets/floor_tile.png')
 	end
 
 	# LOOP
@@ -81,15 +80,18 @@ class Board < Gosu::Window
 
 				case @tiles[i][j]
 				when '0'
-					floor = Entity.new(self, i, j, 50 , 50, 'assets/floor_tile.png')
+					floor = Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png')
 					floor.draw
 				when '1'
-					draw_rect(x_coordinate(j), y_coordinate(i), @width/(@columns), @height/(@rows), color)
+					wall = Entity.new(self, i, j, 50 , 50, 'assets/rock_texture.png')
+					wall.draw
+					# draw_rect(x_coordinate(j), y_coordinate(i), @width/(@columns), @height/(@rows), color)
 				when '2'
-					floor = Entity.new(self, i, j, 50 , 50, 'assets/floor_tile.png')
+					floor = Entity.new(self, i, j, 50 , 50, 'assets/brick_texture.png')
 					floor.draw
 					@cup_cake.move(i, j)
 				when '3'
+					
 				end
 			end
 		end
