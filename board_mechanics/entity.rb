@@ -2,7 +2,7 @@ require 'Gosu'
 
 class Entity
 
-	attr_accessor :x, :y, :width, :height, :image_file_name
+	attr_accessor :x, :y, :width, :height, :image_file_name, :walkable
 
 	def initialize(window, row, column, height, width, image_file_name='')
 		@window = window
@@ -22,6 +22,8 @@ class Entity
 		@image_file_name = image_file_name
 
 		@image = Gosu::Image.new(@image_file_name, rect: [0, 0, @width, @height])
+
+		@walkable = true
 	end
 
 	def move(row, column)
